@@ -5,9 +5,11 @@ const multer = require('multer');
 const graphqlHttp = require('express-graphql');
 const graphqlSchema = require('./graphql/schema');
 
+const api = require('./api/mongodb');
+
 app.use(bodyParser.json());
 
-// set headers
+/// set headers for response object
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(
@@ -22,6 +24,7 @@ app.use((req, res, next) => {
 
 
 });
+
 
 // add auth middleware
 
@@ -56,10 +59,8 @@ app.use((error, req, res, next) => {
 
 
 mongoose
-    .connect(
-        'api-connection string'
-    )
-    .then(result => {
+    .connect(api)
+    .then(() => {
         app.listen(8080);
     })
     .catch(err => console.log(err));
