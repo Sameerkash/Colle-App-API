@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import { Schema as _Schema, model } from 'mongoose';
+const Schema = _Schema;
 
 postSchema = new Schema({
 
     uid: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: _Schema.Types.ObjectId,
         required: true,
         refPath: 'User'
     },
@@ -27,4 +27,4 @@ postSchema = new Schema({
 }
 );
 
-module.exports = mongoose.model('Post', postSchema);
+export default model('Post', postSchema);

@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-notificationSchema = new mongoose.Schema({
+notificationSchema = new Schema({
   uid: {
-    type: mongoose.Schema.Types, ref: "Faculty", required: true
+    type: Schema.Types, ref: "Faculty", required: true
   },
   createdAt: {
     type: Date, default: Date.now()
@@ -23,3 +23,5 @@ notificationSchema = new mongoose.Schema({
     type: String, required: true
   }
 });
+
+export default model('Notification', notificationSchema);

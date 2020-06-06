@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import { Schema as _Schema, model } from 'mongoose';
+const Schema = _Schema;
 
 /// Faculty MongoDB model
 const facultySchema = new Schema({
@@ -22,4 +22,4 @@ const facultySchema = new Schema({
     toke: { type: String, }
 });
 
-module.exports = mongoose.model('Faculty', facultySchema);
+export default model('Faculty', facultySchema);
