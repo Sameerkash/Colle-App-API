@@ -18,12 +18,15 @@ postSchema = new Schema({
     image: {
         type: String
     },
-    tit: {
+    title: {
         type: String, required: true
     },
     created: {
-        type: Date, required: true
+        type: Date, required: true, default: Date.now()
     },
+    updatedAt: {
+        type: Date, required: true
+    }
 }
 );
 
