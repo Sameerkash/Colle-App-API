@@ -1,7 +1,3 @@
-const { buildSchema } = require('graphql');
-
-export default buildSchema(`
-
 type Post {
     _id: ID!
     title: String!
@@ -81,14 +77,14 @@ type PostInpuData{
     imageUrl: String
 }
 
-type RootQuery {
+type Query {
     login(email: String!, password: String!): AuthData!
     posts(page: Int): PostData!
     post(id: ID!): Post!
     user: User!
 }
 
-type RootMutation {
+type Mutation {
     createStudent(userInput: StudentInputData): User!
     createFaculty(userInput: FacultyInoutData): 
     createPost(postInput: PostInputData): Post!
@@ -96,6 +92,3 @@ type RootMutation {
     deletePost(id: ID!): Boolean
     updateProfile(id: ID!): User!
 }
-`
-);
-
