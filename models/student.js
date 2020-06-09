@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import { Schema as _Schema, model } from 'mongoose';
+const Schema = _Schema;
 
 /// Student MongoDB model
 const studentSchema = new Schema({
@@ -20,4 +20,4 @@ const studentSchema = new Schema({
     branch: { type: String, required: true },
 });
 
-module.exports = mongoose.model('Student', studentSchema);
+export default model('Student', studentSchema);

@@ -1,11 +1,12 @@
-const { bodyParser } = require('body-parser');
-const express = require('express');
-const mongoose = require('mongoose');
-const multer = require('multer');
-const graphqlHttp = require('express-graphql');
-const graphqlSchema = require('./graphql/schema');
+import bodyParser from 'body-parser';
+import express from 'express';
+import mongoose from 'mongoose';
+import multer from 'multer';
+import { GraphQLServer } from 'graphql-yoga';
 
-const api = require('./api/mongodb');
+var app = express.Router();
+
+import api from './api/mongodb';
 
 app.use(bodyParser.json());
 
@@ -28,26 +29,6 @@ app.use((req, res, next) => {
 
 // add auth middleware
 
-
-/// setup GraphQL
-app.use(
-    '/graphql',
-    graphqlHttp({
-        schema: graphqlSchema,
-        rootValue: graphqlResolver,
-        graphiql: true,
-        formatError(err) {
-            if (!err.originalError) {
-                return err;
-            }
-            const data = err.originalError.data;
-            const message = err.message || 'An error occurred.';
-            const code = err.originalError.code || 500;
-            return { message: message, status: code, data: data };
-        }
-    })
-);
-
 /// Declare error response 
 app.use((error, req, res, next) => {
     console.log(error);
@@ -57,11 +38,21 @@ app.use((error, req, res, next) => {
     res.status(status).json({ message: message, data: data });
 });
 
+const server = new GraphQLServer({
+    typeDefs: "./graphql/schema.graphql",
+    resolvers: {
+
+    },
+    context: {
+    },
+});
 
 mongoose
     .connect(api)
     .then(() => {
-        app.listen(8080);
+        server.start(() => {
+            console.log('The server is up!');
+        });
     })
     .catch(err => console.log(err));
 
