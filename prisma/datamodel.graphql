@@ -1,4 +1,10 @@
 type User {
   id: ID! @id
   name: String!
+  emai: String! @unique
+  password: String!
+  isFaculty: Boolean!
+  
+
 }
+
