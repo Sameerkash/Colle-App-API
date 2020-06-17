@@ -1,10 +1,26 @@
 type User {
   id: ID! @id
   name: String!
-  emai: String! @unique
+  email: String! @unique
   password: String!
   isFaculty: Boolean!
-  
-
+  department: String
+  posts: [Post!]! 
+  notifications: [Notification!]! 
 }
 
+type Post {
+  id: ID! @id
+  author: User! @relation(link: INLINE)
+  title: String!
+  content: String!
+  imageUrl: String
+}
+
+type Notification {
+  id: ID! @id
+  author: User! @relation(link: INLINE)
+  title: String!
+  content: String!
+  imageUrl: String
+}

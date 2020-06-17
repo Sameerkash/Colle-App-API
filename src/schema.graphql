@@ -1,0 +1,70 @@
+type Query {
+  users(query: String): [User!]!
+  posts(query: String): [Post!]!
+  comments: [Comment!]!
+  me: User!
+  post: Post!
+}
+
+type Mutation {
+  createUser(data: CreateUserInput!): User!
+  deleteUser(id: ID!): User!
+  deletePost(id: ID!): Post!
+  createPost(data: CreatePostInput!): Post!
+  createComment(data: CreateCommentInput!): Comment!
+  deleteComment(id: ID!): Comment!
+  updateUser(id: ID!, data: UpdateuserInput!): User!
+}
+
+type Subscription {
+  comment(postId: ID!): Comment!
+  post: Post!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+ 
+}
+
+input UpdateuserInput {
+  name: String
+  email: String
+ 
+}
+
+input CreatePostInput {
+  title: String!
+  body: String!
+  published: Boolean!
+  author: ID!
+}
+
+input CreateNotificationInput {
+  text: String!
+  author: ID!
+  post: ID!
+}
+
+type User {
+  id: ID! @id
+  name: String!
+  email: String! @unique
+  password: String!
+  isFaculty: Boolean!
+  department: String
+}
+
+type Post {
+  id: ID! @id
+  title: String!
+  content: String!
+  imageUrl: String
+}
+
+type Notification {
+  id: ID! @id
+  title: String!
+  content: String!
+  imageUrl: String
+}
