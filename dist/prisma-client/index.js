@@ -13,10 +13,6 @@ exports.models = [
     {
         name: "User",
         embedded: false
-    },
-    {
-        name: "Post",
-        embedded: false
     }
 ];
 /**

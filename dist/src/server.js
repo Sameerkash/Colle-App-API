@@ -35,24 +35,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = {
-    Query: {
-        me: function (parent, _a, _b) {
-            var id = _a.id;
-            var prisma = _b.prisma;
-            return __awaiter(void 0, void 0, void 0, function () {
-                var user;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
-                        case 0: return [4 /*yield*/, prisma.user({ id: id })];
-                        case 1:
-                            user = _c.sent();
-                            return [2 /*return*/, user];
-                    }
-                });
-            });
-        },
-    },
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-//# sourceMappingURL=resolver.js.map
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.db = void 0;
+var graphql_yoga_1 = require("graphql-yoga");
+var graphql_import_1 = require("graphql-import");
+var resolver_1 = __importDefault(require("./resolvers/resolver"));
+var prisma_client_1 = require("./generated/prisma-client");
+require("dotenv/config");
+var typeDefs = graphql_import_1.importSchema("src/schemas/user.graphql");
+exports.db = new prisma_client_1.Prisma({
+    endpoint: process.env.PRISMA_ENDPOINT || "http://localhost:4466",
+    secret: process.env.PRISMA_SECRET || "",
+});
+var server = new graphql_yoga_1.GraphQLServer({
+    typeDefs: typeDefs,
+    resolvers: resolver_1.default,
+    context: function () { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, ({
+                    prisma: exports.db,
+                })];
+        });
+    }); },
+});
+server.start({ port: 4400 }, function () {
+    console.log("App running on http://localhost:4400");
+});
+//# sourceMappingURL=server.js.map
