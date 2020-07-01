@@ -46,11 +46,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+var bcrypt_1 = __importDefault(require("bcrypt"));
 var Mutation = {
     signUp: function (parent, args, ctx, info) {
         return __awaiter(this, void 0, void 0, function () {
-            var userCheck, user;
+            var userCheck, hashedPassword, user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, ctx.prisma.user({
@@ -61,9 +65,13 @@ var Mutation = {
                         if (userCheck) {
                             throw new Error("Email is already registered");
                         }
+                        return [4 /*yield*/, bcrypt_1.default.hash(args.data.password, 12)];
+                    case 2:
+                        hashedPassword = _a.sent();
+                        args.data.password = hashedPassword;
                         console.log(args.data);
                         return [4 /*yield*/, ctx.prisma.createUser(__assign({}, args.data))];
-                    case 2:
+                    case 3:
                         user = _a.sent();
                         return [2 /*return*/, user];
                 }
