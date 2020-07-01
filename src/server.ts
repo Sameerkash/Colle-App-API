@@ -1,26 +1,15 @@
 import { GraphQLServer } from "graphql-yoga";
-import { importSchema } from "graphql-import";
 
-import resolvers from "./resolvers/resolver";
-import { Prisma } from "./generated/prisma-client";
+import { Prisma, prisma } from "./generated/prisma-client";
 
 import "dotenv/config";
 
-const typeDefs = importSchema("src/schemas/user.graphql");
-
-export const db = new Prisma({
-  endpoint: process.env.PRISMA_ENDPOINT || "http://localhost:4466",
-  secret: process.env.PRISMA_SECRET || "",
-});
+import Query from "./resolvers/query";
+import Mutation from "./resolvers/mutations";
 
 const server = new GraphQLServer({
-  typeDefs,
-  resolvers,
-  context: async () => ({
-    prisma: db,
-  }),
+  typeDefs: "./src/schemas/user.graphql",
+  resolvers: [Query, Mutation],
+  context: { prisma } as any,
 });
-
-server.start({ port: 4400}, () => {
-  console.log("App running on http://localhost:4400");
-});
+server.start(() => console.log(`Server is running on http://localhost:4000`));
