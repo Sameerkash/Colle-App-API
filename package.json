@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@types/bcrypt": "^3.0.0",
-    "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
     "graphql-import": "^1.0.2",
     "graphql-resolvers": "^0.4.2",

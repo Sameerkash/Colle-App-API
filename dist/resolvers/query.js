@@ -41,18 +41,9 @@ var Query = {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, ctx.prisma.users()];
+                    case 0: return [4 /*yield*/, ctx.prisma.users(info)];
                     case 1: 
-                    //  const opArgs = {};
-                    //  if (args.query) {
-                    //    opArgs.where = {
-                    //      OR: [
-                    //        { name_contains: args.query },
-                    //        {
-                    //          email_contains: args.query,
-                    //        },
-                    //      ],
-                    //    };
+                    //  const opArgs: UserWhereInput = {};
                     return [2 /*return*/, _a.sent()];
                 }
             });

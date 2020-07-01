@@ -1,21 +1,13 @@
 import { Context } from "graphql-yoga/dist/types";
+import { Args } from "prisma-client-lib/dist/types";
+import { UserWhereInput } from "../generated/prisma-client";
 
 const Query = {
-  async users(parent: any, args: any, ctx: Context, info: any) {
-    //  const opArgs = {};
+  async users(parent: any, args: Args, ctx: Context, info: any) {
+   //  const opArgs: UserWhereInput = {};
 
-    //  if (args.query) {
-    //    opArgs.where = {
-    //      OR: [
-    //        { name_contains: args.query },
-    //        {
-    //          email_contains: args.query,
-    //        },
-    //      ],
-    //    };
 
-    return await ctx.prisma.users();
-    //  }
+    return await ctx.prisma.users( info);
   },
 };
 
