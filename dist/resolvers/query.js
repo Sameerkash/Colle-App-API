@@ -39,12 +39,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Query = {
     users: function (parent, args, ctx, info) {
         return __awaiter(this, void 0, void 0, function () {
+            var opArgs;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, ctx.prisma.users(info)];
-                    case 1: 
-                    //  const opArgs: UserWhereInput = {};
-                    return [2 /*return*/, _a.sent()];
+                    case 0:
+                        opArgs = {};
+                        if (args.query) {
+                            opArgs = {
+                                email_contains: args.querry,
+                            };
+                        }
+                        return [4 /*yield*/, ctx.prisma.users({
+                                where: {
+                                    name_contains: args.query,
+                                },
+                            })];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
