@@ -1,13 +1,19 @@
 import { Context } from "graphql-yoga/dist/types";
-import { getServers } from "dns";
+import { Args } from "prisma-client-lib/dist/types";
 
 const Mutation = {
-  async createUser(parent: any, args: any, ctx: Context, info: any) {
-    console.log(args);
+  async signUp(parent: any, args: Args, ctx: Context, info: any) {
+    const userCheck = await ctx.prisma.user({
+      email: args.data.email,
+    });
+    if (userCheck) {
+      throw new Error("Email is already registered");
+    }
+    console.log(args.data);
     const user = await ctx.prisma.createUser({
       ...args.data,
     });
-    console.log(user);
+
     return user;
   },
 };

@@ -48,17 +48,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Mutation = {
-    createUser: function (parent, args, ctx, info) {
+    signUp: function (parent, args, ctx, info) {
         return __awaiter(this, void 0, void 0, function () {
-            var user;
+            var userCheck, user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        console.log(args);
-                        return [4 /*yield*/, ctx.prisma.createUser(__assign({}, args.data))];
+                    case 0: return [4 /*yield*/, ctx.prisma.user({
+                            email: args.data.email,
+                        })];
                     case 1:
+                        userCheck = _a.sent();
+                        if (userCheck) {
+                            throw new Error("Email is already registered");
+                        }
+                        console.log(args.data);
+                        return [4 /*yield*/, ctx.prisma.createUser(__assign({}, args.data))];
+                    case 2:
                         user = _a.sent();
-                        console.log(user);
                         return [2 /*return*/, user];
                 }
             });
