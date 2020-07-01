@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -52,27 +41,54 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var bcrypt_1 = __importDefault(require("bcrypt"));
 var Mutation = {
-    signUp: function (parent, args, ctx, info) {
+    signUp: function (_parent, _a, _b, _info) {
+        var _c = _a.data, email = _c.email, password = _c.password, name = _c.name;
+        var prisma = _b.prisma;
         return __awaiter(this, void 0, void 0, function () {
             var userCheck, hashedPassword, user;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, ctx.prisma.user({
-                            email: args.data.email,
-                        })];
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0: return [4 /*yield*/, prisma.user({ email: email })];
                     case 1:
-                        userCheck = _a.sent();
+                        userCheck = _d.sent();
                         if (userCheck) {
                             throw new Error("Email is already registered");
                         }
-                        return [4 /*yield*/, bcrypt_1.default.hash(args.data.password, 12)];
+                        return [4 /*yield*/, bcrypt_1.default.hash(password, 12)];
                     case 2:
-                        hashedPassword = _a.sent();
-                        args.data.password = hashedPassword;
-                        console.log(args.data);
-                        return [4 /*yield*/, ctx.prisma.createUser(__assign({}, args.data))];
+                        hashedPassword = _d.sent();
+                        password = hashedPassword;
+                        return [4 /*yield*/, prisma.createUser({
+                                email: email,
+                                password: password,
+                                name: name,
+                            })];
                     case 3:
-                        user = _a.sent();
+                        user = _d.sent();
+                        return [2 /*return*/, user];
+                }
+            });
+        });
+    },
+    deleteUser: function (_parent, _a, ctx, _info) {
+        var id = _a.id;
+        return __awaiter(this, void 0, void 0, function () {
+            var userCheck, user;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, ctx.prisma.user({
+                            id: id,
+                        })];
+                    case 1:
+                        userCheck = _b.sent();
+                        if (!userCheck) {
+                            throw new Error("User not found");
+                        }
+                        return [4 /*yield*/, ctx.prisma.deleteUser({
+                                id: id,
+                            })];
+                    case 2:
+                        user = _b.sent();
                         return [2 /*return*/, user];
                 }
             });
