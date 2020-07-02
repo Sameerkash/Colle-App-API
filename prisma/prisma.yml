@@ -1,7 +1,7 @@
 endpoint: http://localhost:4466
 datamodel: datamodel.graphql
 databaseType: document
-# secret: ${env:PRISMA_MANAGEMENT_API_SECRET}
+# secret: ${env:PRISMA_SECRET}
 
 generate:
     - generator: typescript-client

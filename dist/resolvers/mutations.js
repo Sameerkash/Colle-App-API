@@ -41,6 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var bcrypt_1 = __importDefault(require("bcrypt"));
 var token_1 = require("../utils/token");
+var header_1 = require("../utils/header");
 var Mutation = {
     signUp: function (_parent, _a, _b, _info) {
         var _c = _a.data, email = _c.email, password = _c.password, name = _c.name;
@@ -104,23 +105,28 @@ var Mutation = {
     deleteUser: function (_parent, _a, ctx, _info) {
         var id = _a.id;
         return __awaiter(this, void 0, void 0, function () {
-            var userCheck, user;
+            var userId, user, userCheck;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, ctx.prisma.user({
-                            id: id,
-                        })];
+                    case 0:
+                        userId = header_1.getUserId(ctx.request);
+                        return [4 /*yield*/, ctx.prisma.user({
+                                id: id,
+                            })];
                     case 1:
                         userCheck = _b.sent();
                         if (!userCheck) {
                             throw new Error("User not found");
                         }
+                        if (!(userId == id)) return [3 /*break*/, 3];
                         return [4 /*yield*/, ctx.prisma.deleteUser({
                                 id: id,
                             })];
                     case 2:
                         user = _b.sent();
-                        return [2 /*return*/, user];
+                        return [3 /*break*/, 4];
+                    case 3: throw new Error("Not Authorized to delete");
+                    case 4: return [2 /*return*/, user];
                 }
             });
         });

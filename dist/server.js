@@ -11,7 +11,9 @@ var mutations_1 = __importDefault(require("./resolvers/mutations"));
 var server = new graphql_yoga_1.GraphQLServer({
     typeDefs: "./src/schemas/user.graphql",
     resolvers: [query_1.default, mutations_1.default],
-    context: { prisma: prisma_client_1.prisma },
+    context: function (request) {
+        return { prisma: prisma_client_1.prisma, request: request };
+    },
 });
 server.start(function () { return console.log("Server is running on http://localhost:4000"); });
 //# sourceMappingURL=server.js.map

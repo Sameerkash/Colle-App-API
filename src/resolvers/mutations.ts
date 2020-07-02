@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { User } from "../generated/prisma-client";
 
 import { generateToken } from "../utils/token";
+import { getUserId } from "../utils/header";
 
 const Mutation = {
   async signUp(
@@ -60,15 +61,22 @@ const Mutation = {
     ctx: Context,
     _info: any
   ): Promise<User> {
+    const userId: string = getUserId(ctx.request);
+    var user: User;
+
     const userCheck = await ctx.prisma.user({
       id: id,
     });
     if (!userCheck) {
       throw new Error("User not found");
     }
-    const user: User = await ctx.prisma.deleteUser({
-      id: id,
-    });
+    if (userId == id) {
+      user = await ctx.prisma.deleteUser({
+        id: id,
+      });
+    } else {
+      throw new Error("Not Authorized to delete");
+    }
 
     return user;
   },
