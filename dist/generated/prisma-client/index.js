@@ -12,12 +12,12 @@ var prisma_schema_1 = require("./prisma-schema");
 exports.models = [
     {
         name: "User",
-        embedded: false
+        embedded: false,
     },
     {
         name: "Post",
-        embedded: false
-    }
+        embedded: false,
+    },
 ];
 /**
  * Type Defs
@@ -25,7 +25,7 @@ exports.models = [
 exports.Prisma = prisma_client_lib_1.makePrismaClientClass({
     typeDefs: prisma_schema_1.typeDefs,
     models: exports.models,
-    endpoint: "http://localhost:4466"
+    endpoint: "http://localhost:4466",
 });
 exports.prisma = new exports.Prisma();
 //# sourceMappingURL=index.js.map

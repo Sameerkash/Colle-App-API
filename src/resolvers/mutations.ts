@@ -31,6 +31,29 @@ const Mutation = {
     };
   },
 
+  async signin(
+    _: any,
+    { data: { email, password } }: Args,
+    { prisma }: Context,
+    info: any
+  ): Promise<{ user: User; token: string }> {
+    const userCheck: User = await prisma.user({ email });
+    if (!userCheck) {
+      throw new Error("User Not Found");
+    }
+
+    const isMatch: boolean = await bcrypt.compare(password, userCheck.password);
+
+    if (!isMatch) {
+      throw Error("Wrong Credentials");
+    }
+
+    return {
+      user: userCheck,
+      token: generateToken(userCheck.id),
+    };
+  },
+
   async deleteUser(
     _parent: any,
     { id }: Args,

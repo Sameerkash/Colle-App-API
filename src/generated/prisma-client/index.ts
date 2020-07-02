@@ -6,9 +6,10 @@ import { DocumentNode } from "graphql";
 import {
   makePrismaClientClass,
   BaseClientOptions,
-  Model
+  Model,
 } from "prisma-client-lib";
 import { typeDefs } from "./prisma-schema";
+import { createSecretKey } from "crypto";
 
 export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
   U[keyof U];
@@ -897,12 +898,12 @@ export type Long = string;
 export const models: Model[] = [
   {
     name: "User",
-    embedded: false
+    embedded: false,
   },
   {
     name: "Post",
-    embedded: false
-  }
+    embedded: false,
+  },
 ];
 
 /**
@@ -912,6 +913,7 @@ export const models: Model[] = [
 export const Prisma = makePrismaClientClass<ClientConstructor<Prisma>>({
   typeDefs,
   models,
-  endpoint: `http://localhost:4466`
+  endpoint: `http://localhost:4466`,
+  // secret: `${process.env.PRISMA_SECRET}`,
 });
 export const prisma = new Prisma();

@@ -40,6 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var bcrypt_1 = __importDefault(require("bcrypt"));
+var token_1 = require("../utils/token");
 var Mutation = {
     signUp: function (_parent, _a, _b, _info) {
         var _c = _a.data, email = _c.email, password = _c.password, name = _c.name;
@@ -65,7 +66,37 @@ var Mutation = {
                             })];
                     case 3:
                         user = _d.sent();
-                        return [2 /*return*/, user];
+                        return [2 /*return*/, {
+                                user: user,
+                                token: token_1.generateToken(user.id),
+                            }];
+                }
+            });
+        });
+    },
+    signin: function (_, _a, _b, info) {
+        var _c = _a.data, email = _c.email, password = _c.password;
+        var prisma = _b.prisma;
+        return __awaiter(this, void 0, void 0, function () {
+            var userCheck, isMatch;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0: return [4 /*yield*/, prisma.user({ email: email })];
+                    case 1:
+                        userCheck = _d.sent();
+                        if (!userCheck) {
+                            throw new Error("User Not Found");
+                        }
+                        return [4 /*yield*/, bcrypt_1.default.compare(password, userCheck.password)];
+                    case 2:
+                        isMatch = _d.sent();
+                        if (!isMatch) {
+                            throw Error("Wrong Credentials");
+                        }
+                        return [2 /*return*/, {
+                                user: userCheck,
+                                token: token_1.generateToken(userCheck.id),
+                            }];
                 }
             });
         });
