@@ -1,6 +1,7 @@
 type Query {
   users(query: String): [User!]!
   posts(query: String): [Post!]!
+  signin(query: String ):AuthPayload!
   me: User!
   post: Post!
 }
@@ -15,6 +16,12 @@ type Mutation {
 
 type Subscription {
   post: Post!
+}
+
+
+type AuthPayload {
+  token: String!
+  user: User!
 }
 
 input CreateUserInput {

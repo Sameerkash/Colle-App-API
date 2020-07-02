@@ -39,20 +39,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Query = {
     users: function (parent, args, ctx, info) {
         return __awaiter(this, void 0, void 0, function () {
-            var opArgs;
+            var where;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        opArgs = {};
+                        // const  where: UserWhereInput = {};
                         if (args.query) {
-                            opArgs = {
-                                email_contains: args.querry,
+                            where = {
+                                name_contains: args.query,
                             };
                         }
                         return [4 /*yield*/, ctx.prisma.users({
-                                where: {
-                                    name_contains: args.query,
-                                },
+                                where: where
                             })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
