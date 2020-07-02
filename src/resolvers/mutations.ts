@@ -3,13 +3,15 @@ import { Args } from "prisma-client-lib/dist/types";
 import bcrypt from "bcrypt";
 import { User } from "../generated/prisma-client";
 
+import { generateToken } from "../utils/token";
+
 const Mutation = {
   async signUp(
     _parent: any,
     { data: { email, password, name } }: Args,
     { prisma }: Context,
     _info: any
-  ): Promise<User> {
+  ): Promise<{ user: User; token: string }> {
     const userCheck: User = await prisma.user({ email });
     if (userCheck) {
       throw new Error("Email is already registered");
@@ -23,7 +25,10 @@ const Mutation = {
       name: name,
     });
 
-    return user;
+    return {
+      user,
+      token: generateToken(user.id),
+    };
   },
 
   async deleteUser(

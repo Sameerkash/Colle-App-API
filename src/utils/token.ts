@@ -6,4 +6,4 @@ function generateToken(userId: string): string {
   });
 }
 
-export default { generateToken };
+export  { generateToken };
