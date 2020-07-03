@@ -1,7 +1,7 @@
 import { Context } from "graphql-yoga/dist/types";
 import { Args } from "prisma-client-lib/dist/types";
 import bcrypt from "bcrypt";
-import { User } from "../generated/prisma-client";
+import { User, Post } from "../generated/prisma-client";
 
 import { generateToken } from "../utils/token";
 import { getUserId } from "../utils/header";
@@ -79,6 +79,25 @@ const Mutation = {
     }
 
     return user;
+  },
+
+  async createPost(_: any, args: Args, ctx: Context, info: any): Promise<Post> {
+    const userId: string = getUserId(ctx.request);
+
+    const post: Post = await ctx.prisma.createPost(
+      {
+        title: args.data.title,
+        body: args.data.body,
+        author: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+      info
+    );
+
+    return post;
   },
 };
 

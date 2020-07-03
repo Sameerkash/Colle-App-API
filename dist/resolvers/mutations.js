@@ -131,6 +131,29 @@ var Mutation = {
             });
         });
     },
+    createPost: function (_, args, ctx, info) {
+        return __awaiter(this, void 0, void 0, function () {
+            var userId, post;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        userId = header_1.getUserId(ctx.request);
+                        return [4 /*yield*/, ctx.prisma.createPost({
+                                title: args.data.title,
+                                body: args.data.body,
+                                author: {
+                                    connect: {
+                                        id: userId,
+                                    },
+                                },
+                            }, info)];
+                    case 1:
+                        post = _a.sent();
+                        return [2 /*return*/, post];
+                }
+            });
+        });
+    },
 };
 exports.default = { Mutation: Mutation };
 //# sourceMappingURL=mutations.js.map

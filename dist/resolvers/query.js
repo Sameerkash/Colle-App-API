@@ -57,6 +57,22 @@ var Query = {
             });
         });
     },
+    posts: function (_, args, ctx, info) {
+        return __awaiter(this, void 0, void 0, function () {
+            var where;
+            return __generator(this, function (_a) {
+                where = {};
+                if (args.query) {
+                    where = {
+                        title_contains: args.query,
+                    };
+                }
+                return [2 /*return*/, ctx.prisma.posts({
+                        where: where,
+                    }, info)];
+            });
+        });
+    },
 };
 exports.default = { Query: Query };
 //# sourceMappingURL=query.js.map
