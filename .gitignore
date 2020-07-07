@@ -3,3 +3,5 @@ api
 docker-compose.yml
 config
 .env
+yarn.lock
+yarn-error.log
