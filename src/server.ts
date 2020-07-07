@@ -1,12 +1,14 @@
+import { use } from "nexus";
+import { prisma } from "nexus-plugin-prisma";
+import { auth } from "nexus-plugin-jwt-auth";
+import { protectedPaths } from "./utils/permissions";
 
+// enables prisma
+use(prisma());
 
-
-
-// const server = new GraphQLServer({
-//   typeDefs: "./src/schemas/user.graphql",
-//   resolvers: [Query, Mutation],
-//   context: (request) => {
-//     return { prisma, request } as any;
-//   },
-// });
-// server.start(() => console.log(`Server is running on http://localhost:4000`));
+use(
+  auth({
+    appSecret: "MYSECRET",
+    protectedPaths,
+  })
+);
