@@ -8,6 +8,7 @@ export const Post = schema.objectType({
     t.boolean("published");
     t.string("title");
     t.string("content");
+    t.string("imageUrl")
     t.field("autor", {
       type: User,
       resolve(root, _, ctx) {
