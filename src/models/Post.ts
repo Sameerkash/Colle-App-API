@@ -8,11 +8,11 @@ export const Post = schema.objectType({
     t.boolean("published");
     t.string("title");
     t.string("content");
-    t.string("imageUrl")
+    t.string("imageUrl");
     t.field("autor", {
       type: User,
       resolve(root, _, ctx) {
-        return ctx.getPost(root.id).user();
+        return ctx.db.post.findOne({ where: { id: root.id } }).author();
       },
     });
   },

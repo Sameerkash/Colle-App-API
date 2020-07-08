@@ -3,7 +3,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 generator client {
@@ -18,7 +18,7 @@ model Post {
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  Int?
   imageUrl  String?
-  createdAt String
+  createdAt DateTime
 }
 
 model User {

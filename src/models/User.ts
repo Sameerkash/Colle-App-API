@@ -13,7 +13,7 @@ export const User = schema.objectType({
     t.list.field("posts", {
       type: Post,
       resolve(root, _, ctx) {
-        return ctx.getUser(root.id).posts();
+        return ctx.db.user.findOne({ where: { id: root.id } }).posts();
       },
     });
   },

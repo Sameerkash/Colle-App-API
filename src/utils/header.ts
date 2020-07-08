@@ -1,21 +1,12 @@
-import { ContextParameters } from "graphql-yoga/dist/types";
-import * as jwt from "jsonwebtoken";
-export function getUserId(
-  request: ContextParameters,
-  requireAuth: boolean = true
-) {
-  const header: string | undefined = request.request.headers.authorization;
+// import { ContextParameters } from "graphql-yoga/dist/types";
 
-  if (header) {
-    const token: string = header.replace("Bearer ", "");
-    const { userId }: any = jwt.verify(token, `${process.env.JWT_SECRET_KEY}`);
-
-    return userId;
+function getUserId(token: any | null | undefined) {
+  const userId = token.userId;
+  if (!userId) {
+    throw new Error("Not Authorized!");
   }
 
-  if (requireAuth) {
-    throw new Error("Authentication required");
-  }
-
-  return null;
+  return userId;
 }
+
+export { getUserId };
