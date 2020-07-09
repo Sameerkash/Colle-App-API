@@ -38,7 +38,7 @@ type Post {
 type Query {
   allPosts: [Post!]
   allusers: [User!]
-  getPost(search: String): [Post!]
+  getPost(search: String!): [Post!]
 }
 
 type User {
