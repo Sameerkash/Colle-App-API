@@ -21,18 +21,18 @@ export const Query = schema.queryType({
       args: {
         search: schema.stringArg({ nullable: false }),
       },
-      resolve: (parent, args, ctx) => {
+      resolve: (_parent, { search }, ctx) => {
         return ctx.db.post.findMany({
           where: {
             OR: [
               {
                 title: {
-                  contains: args.search,
+                  contains: search,
                 },
               },
               {
                 content: {
-                  contains: args.search,
+                  contains: search,
                 },
               },
             ],

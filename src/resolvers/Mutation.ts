@@ -1,5 +1,5 @@
 import { schema } from "nexus";
-import { hash } from "bcrypt";
+import { hash } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { getUserId } from "../utils/header";
 import { auth } from "nexus-plugin-jwt-auth";
