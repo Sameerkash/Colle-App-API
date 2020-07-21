@@ -13,16 +13,22 @@ export const Mutation = schema.mutationType({
         name: schema.stringArg(),
         email: schema.stringArg({ nullable: false }),
         password: schema.stringArg({ nullable: false }),
-        // department: schema.stringArg({ nullable: false }),
-        // isFaculty: schema.booleanArg(),
+        department: schema.stringArg({ nullable: false }),
+        isFaculty: schema.booleanArg(),
       },
-      resolve: async (_parent, { name, email, password }, ctx) => {
+      resolve: async (
+        _parent,
+        { name, email, password, department, isFaculty },
+        ctx
+      ) => {
         const hashedPassword = await hash(password, 10);
         const user = await ctx.db.user.create({
           data: {
             name,
             email,
             password: hashedPassword,
+            department,
+            isFaculty,
           },
         });
         return {

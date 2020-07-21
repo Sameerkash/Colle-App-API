@@ -21,7 +21,7 @@ scalar Json
 
 type Mutation {
   createDraft(authorId: String!, content: String!, imageUrl: String, title: String!): Post
-  signUp(email: String!, name: String, password: String!): AuthPayload
+  signUp(department: String!, email: String!, isFaculty: Boolean, name: String, password: String!): AuthPayload
 }
 
 type Post {
@@ -39,6 +39,8 @@ type Query {
   allPosts: [Post!]
   allusers: [User!]
   getPost(search: String!): [Post!]
+  login(email: String!, password: String!): AuthPayload
+  me: User
 }
 
 type User {

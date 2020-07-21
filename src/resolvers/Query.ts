@@ -1,6 +1,10 @@
 import { schema } from "nexus";
+import { getUserId } from "../utils/header";
+import { compare } from "bcryptjs";
+import { sign } from "jsonwebtoken";
 
-export const Query = schema.queryType({
+export const Query = schema.extendType({
+  type: "Query",
   definition(t) {
     t.list.field("allusers", {
       type: "User",
@@ -38,6 +42,48 @@ export const Query = schema.queryType({
             ],
           },
         });
+      },
+    });
+
+    t.field("me", {
+      type: "User",
+      nullable: true,
+      resolve: async (_parent, _args, ctx) => {
+        const userId = getUserId(ctx.token);
+        if (!userId) {
+          throw new Error("Invalid userId");
+        }
+        return ctx.db.user.findOne({
+          where: {
+            id: parseInt(userId),
+          },
+        });
+      },
+    });
+
+    t.field("login", {
+      type: "AuthPayload",
+      args: {
+        email: schema.stringArg({ nullable: false }),
+        password: schema.stringArg({ nullable: false }),
+      },
+      resolve: async (_parent, { email, password }, context) => {
+        const user = await context.db.user.findOne({
+          where: {
+            email,
+          },
+        });
+        if (!user) {
+          throw new Error(`No user found for email: ${email}`);
+        }
+        const passwordValid = await compare(password, user.password);
+        if (!passwordValid) {
+          throw new Error("Invalid password");
+        }
+        return {
+          token: sign({ userId: user.id }, "MYSECRET"),
+          user,
+        };
       },
     });
   },

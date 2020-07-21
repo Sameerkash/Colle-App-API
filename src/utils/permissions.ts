@@ -1,5 +1,5 @@
 const protectedPaths = [
-  "Query.me",
+  "Query.profile",
   "Query.filterPosts",
   "Query.post",
   "Query.getPost",
