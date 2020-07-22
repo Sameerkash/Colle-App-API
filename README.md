@@ -12,3 +12,9 @@
 
 ```yarn run dev or npx nexus dev```
 
+
+**Check List**
+- [x] CRUD for User and Post
+- [x] Jwt auth using nexus-jwt-auth plugin
+- [ ] Pagination of Posts and users
+- [ ] Media upload support 

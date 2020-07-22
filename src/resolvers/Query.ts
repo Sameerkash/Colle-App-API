@@ -74,11 +74,11 @@ export const Query = schema.extendType({
           },
         });
         if (!user) {
-          throw new Error(`No user found for email: ${email}`);
+          throw new Error("Invalid Credentials");
         }
         const passwordValid = await compare(password, user.password);
         if (!passwordValid) {
-          throw new Error("Invalid password");
+          throw new Error("Invalid Credentials");
         }
         return {
           token: sign({ userId: user.id }, "MYSECRET"),
