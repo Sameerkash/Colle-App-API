@@ -2,7 +2,6 @@ import { schema } from "nexus";
 import { hash } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { getUserId } from "../utils/header";
-import { auth } from "nexus-plugin-jwt-auth";
 
 export const Mutation = schema.mutationType({
   definition(t) {
@@ -46,7 +45,7 @@ export const Mutation = schema.mutationType({
         imageUrl: schema.stringArg(),
         authorId: schema.stringArg({ nullable: false }),
       },
-      resolve: (_parent, { title, content, authorId, imageUrl }, ctx) => {
+      resolve: (_parent, { title, content, imageUrl }, ctx) => {
         const userId = getUserId(ctx.token);
         if (!userId) {
           throw new Error("Invalid userId");
@@ -61,6 +60,87 @@ export const Mutation = schema.mutationType({
                 id: Number(userId),
               },
             },
+          },
+        });
+      },
+    });
+
+    t.field("publishDraft", {
+      type: "Post",
+      args: {
+        postId: schema.intArg({ nullable: false }),
+      },
+      resolve: async (_parent, args, ctx) => {
+        const userId = getUserId(ctx.token);
+        if (!userId) {
+          throw new Error("Invalid userId");
+        }
+        const post = await ctx.db.post.findOne({
+          where: { id: args.postId },
+        });
+        if (post?.authorId != userId) {
+          throw new Error("Not authorized");
+        }
+        return ctx.db.post.update({
+          where: {
+            id: args.postId,
+          },
+          data: {
+            published: true,
+          },
+        });
+      },
+    });
+
+    t.field("editPost", {
+      type: "Post",
+      args: {
+        postId: schema.intArg({ nullable: false }),
+        title: schema.stringArg({ nullable: false }),
+        content: schema.stringArg({ nullable: false }),
+      },
+      resolve: async (_parent, args, ctx) => {
+        const userId = getUserId(ctx.token);
+        if (!userId) {
+          throw new Error("Invalid userId");
+        }
+        const post = await ctx.db.post.findOne({
+          where: { id: args.postId },
+        });
+        if (post?.authorId != userId) {
+          throw new Error("Not authorized");
+        }
+        return ctx.db.post.update({
+          where: {
+            id: args.postId,
+          },
+          data: {
+            title: args.title,
+            content: args.content,
+          },
+        });
+      },
+    });
+
+    t.field("deletePost", {
+      type: "Post",
+      args: {
+        postId: schema.intArg({ nullable: false }),
+      },
+      resolve: async (_parent, args, ctx) => {
+        const userId = getUserId(ctx.token);
+        if (!userId) {
+          throw new Error("Invalid userId");
+        }
+        const post = await ctx.db.post.findOne({
+          where: { id: args.postId },
+        });
+        if (post?.authorId != userId) {
+          throw new Error("Not authorized");
+        }
+        return ctx.db.post.delete({
+          where: {
+            id: args.postId,
           },
         });
       },

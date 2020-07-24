@@ -3,6 +3,9 @@ import { getUserId } from "../utils/header";
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 
+let myPostsCursor: number;
+let mySearchCursor: number;
+
 export const Query = schema.extendType({
   type: "Query",
   definition(t) {
@@ -15,8 +18,42 @@ export const Query = schema.extendType({
 
     t.list.field("allPosts", {
       type: "Post",
-      resolve: (_parent, _args, ctx) => {
-        return ctx.db.post.findMany();
+      args: {
+        nextPage: schema.booleanArg({ default: false }),
+        take: schema.intArg({ nullable: false }),
+      },
+      resolve: async (_parent, args, ctx) => {
+        if (!args.nextPage) {
+          const firstQueryResults = await ctx.db.post.findMany({
+            take: args.take,
+            orderBy: {
+              createdAt: "desc",
+            },
+          });
+          const lastPostInResults = firstQueryResults[args.take - 1]; // Remember: zero-based index! :)
+
+          myPostsCursor = lastPostInResults.id;
+
+          return firstQueryResults;
+        } else {
+          const secondQuery = await ctx.db.post.findMany({
+            take: args.take,
+            skip: 1,
+            cursor: {
+              id: myPostsCursor,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+          });
+          const lastPostInResults = secondQuery[args.take - 1]; // Remember: zero-based index! :)
+          if (lastPostInResults === undefined) {
+            return secondQuery;
+          }
+          myPostsCursor = lastPostInResults.id;
+
+          return secondQuery;
+        }
       },
     });
 
@@ -24,24 +61,59 @@ export const Query = schema.extendType({
       type: "Post",
       args: {
         search: schema.stringArg({ nullable: false }),
+        nextPage: schema.booleanArg({ default: false }),
+        take: schema.intArg({ nullable: false, default: 30 }),
       },
-      resolve: (_parent, { search }, ctx) => {
-        return ctx.db.post.findMany({
-          where: {
-            OR: [
-              {
-                title: {
-                  contains: search,
-                },
+      resolve: async (_parent, args, ctx) => {
+        const where = {
+          OR: [
+            {
+              title: {
+                contains: args.search,
               },
-              {
-                content: {
-                  contains: search,
-                },
+            },
+            {
+              content: {
+                contains: args.search,
               },
-            ],
-          },
-        });
+            },
+          ],
+        };
+
+        if (!args.nextPage) {
+          const firstQueryResults = await ctx.db.post.findMany({
+            take: args.take,
+            orderBy: {
+              createdAt: "desc",
+            },
+          });
+          const lastPostInResults = firstQueryResults[args.take - 1]; // Remember: zero-based index! :)
+          if (lastPostInResults === undefined) {
+            return firstQueryResults;
+          }
+          mySearchCursor = lastPostInResults.id;
+
+          return firstQueryResults;
+        } else {
+          const secondQuery = await ctx.db.post.findMany({
+            where: where,
+            take: args.take,
+            skip: 1,
+            cursor: {
+              id: mySearchCursor,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+          });
+          const lastPostInResults = secondQuery[args.take - 1]; // Remember: zero-based index! :)
+          if (lastPostInResults === undefined) {
+            return secondQuery;
+          }
+          mySearchCursor = lastPostInResults.id;
+
+          return secondQuery;
+        }
       },
     });
 

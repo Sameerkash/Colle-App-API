@@ -21,6 +21,9 @@ scalar Json
 
 type Mutation {
   createDraft(authorId: String!, content: String!, imageUrl: String, title: String!): Post
+  deletePost(postId: Int!): Post
+  editPost(content: String!, postId: Int!, title: String!): Post
+  publishDraft(postId: Int!): Post
   signUp(department: String!, email: String!, isFaculty: Boolean, name: String, password: String!): AuthPayload
 }
 
@@ -36,9 +39,9 @@ type Post {
 }
 
 type Query {
-  allPosts: [Post!]
+  allPosts(nextPage: Boolean = false, take: Int!): [Post!]
   allusers: [User!]
-  getPost(search: String!): [Post!]
+  getPost(nextPage: Boolean = false, search: String!, take: Int! = 30): [Post!]
   login(email: String!, password: String!): AuthPayload
   me: User
 }

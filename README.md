@@ -10,7 +10,7 @@
 
  **To Start the server** 
 
-```yarn run dev or npx nexus dev```
+```yarn dev or npx nexus dev```
 
 
 **Check List**
