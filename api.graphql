@@ -22,6 +22,7 @@ scalar Json
 type Mutation {
   createDraft(authorId: String!, content: String!, imageUrl: String, title: String!): Post
   deletePost(postId: Int!): Post
+  deleteUser: User
   editPost(content: String!, postId: Int!, title: String!): Post
   publishDraft(postId: Int!): Post
   signUp(department: String!, email: String!, isFaculty: Boolean, name: String, password: String!): AuthPayload

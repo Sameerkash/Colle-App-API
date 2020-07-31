@@ -14,7 +14,10 @@
 
 
 **Check List**
+
+
 - [x] CRUD for User and Post
 - [x] Jwt auth using nexus-jwt-auth plugin
-- [ ] Pagination of Posts and users
+- [x] Pagination of Posts and users 
+- [x] Search with pagination
 - [ ] Media upload support 

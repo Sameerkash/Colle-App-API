@@ -9,6 +9,7 @@ let mySearchCursor: number;
 export const Query = schema.extendType({
   type: "Query",
   definition(t) {
+    // Query to get all users in db
     t.list.field("allusers", {
       type: "User",
       resolve(_parent, _args, ctx) {
@@ -16,6 +17,7 @@ export const Query = schema.extendType({
       },
     });
 
+    // Get list of all posts in descending order
     t.list.field("allPosts", {
       type: "Post",
       args: {
@@ -31,7 +33,11 @@ export const Query = schema.extendType({
             },
           });
           const lastPostInResults = firstQueryResults[args.take - 1]; // Remember: zero-based index! :)
-
+          if (lastPostInResults === undefined) {
+            let length = firstQueryResults.length;
+            myPostsCursor = firstQueryResults[length - 1].id;
+            return firstQueryResults;
+          }
           myPostsCursor = lastPostInResults.id;
 
           return firstQueryResults;
@@ -57,6 +63,7 @@ export const Query = schema.extendType({
       },
     });
 
+    // Search a given Post using a search parameter
     t.list.field("getPost", {
       type: "Post",
       args: {
@@ -83,12 +90,15 @@ export const Query = schema.extendType({
         if (!args.nextPage) {
           const firstQueryResults = await ctx.db.post.findMany({
             take: args.take,
+            where: where,
             orderBy: {
               createdAt: "desc",
             },
           });
           const lastPostInResults = firstQueryResults[args.take - 1]; // Remember: zero-based index! :)
           if (lastPostInResults === undefined) {
+            let length = firstQueryResults.length;
+            mySearchCursor = firstQueryResults[length - 1].id;
             return firstQueryResults;
           }
           mySearchCursor = lastPostInResults.id;
@@ -117,6 +127,7 @@ export const Query = schema.extendType({
       },
     });
 
+    // User Profile 
     t.field("me", {
       type: "User",
       nullable: true,

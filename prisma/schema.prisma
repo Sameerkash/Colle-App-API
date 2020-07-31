@@ -19,7 +19,7 @@ model Post {
   authorId  Int?
   imageUrl  String?
   createdAt String
-}
+} 
 
 model User {
   id         Int     @id @default(autoincrement())

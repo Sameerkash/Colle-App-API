@@ -124,6 +124,7 @@ export const Mutation = schema.mutationType({
 
     t.field("deletePost", {
       type: "Post",
+      nullable: true,
       args: {
         postId: schema.intArg({ nullable: false }),
       },
@@ -141,6 +142,29 @@ export const Mutation = schema.mutationType({
         return ctx.db.post.delete({
           where: {
             id: args.postId,
+          },
+        });
+      },
+    });
+
+    t.field("deleteUser", {
+      type: "User",
+      nullable: true,
+
+      resolve: async (_parent, _args, ctx) => {
+        const userId = getUserId(ctx.token);
+        if (!userId) {
+          throw new Error("Invalid userId");
+        }
+        const user = await ctx.db.user.findOne({
+          where: { id: userId },
+        });
+        if (user?.id != userId) {
+          throw new Error("Not authorized");
+        }
+        return ctx.db.user.delete({
+          where: {
+            id: userId,
           },
         });
       },
