@@ -20,4 +20,5 @@
 - [x] Jwt auth using nexus-jwt-auth plugin
 - [x] Pagination of Posts and users 
 - [x] Search with pagination
+- [ ] Add Likes model and integerate Likes for Posts
 - [ ] Media upload support 
