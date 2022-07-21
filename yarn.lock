@@ -3469,9 +3469,10 @@ undefsafe@^2.0.2:
   dependencies:
     debug "^2.2.0"
 
-"undici@github:mcollina/undici":
-  version "1.2.2"
-  resolved "https://codeload.github.com/mcollina/undici/tar.gz/672b74b3255da65ce08bb7c1df22e8271595aa07"
+undici@mcollina/undici:
+  version "5.8.0"
+  uid "0ef0e265e1c8edf2614f058ea1a4224349680e99"
+  resolved "https://codeload.github.com/mcollina/undici/tar.gz/0ef0e265e1c8edf2614f058ea1a4224349680e99"
 
 unique-string@^2.0.0:
   version "2.0.0"
